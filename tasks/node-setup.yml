@@ -1,0 +1,54 @@
+- name: Install nodejs and npm
+  homebrew:
+    name: ["node"]
+  tags:
+    - install
+    - node
+
+- name: npmjs prefix
+  ansible.builtin.command:
+    cmd: mkdir -p ~/.local/.npm-global
+  tags:
+    - install
+    - node
+
+- name: npmjs global settings
+  ansible.builtin.command:
+    cmd: npm config set prefix '~/.local/.npm-global'
+  tags:
+    - install
+    - node
+
+- name: Add npmjs global path to bash profile
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.bash_profile"
+    line: "export PATH=~/.local/.npm-global/bin:$PATH"
+    create: yes
+  tags:
+    - install
+    - node
+    - npm-path
+
+- name: Source bash profile
+  ansible.builtin.command:
+    cmd: source ~/.bash_profile
+  tags:
+    - install
+    - node
+    - npm-path
+
+- name: Install N
+  npm:
+    name: n
+    global: yes
+  tags:
+    - install
+    - node
+
+- name: Install correct version of Node
+  shell: n 14
+  args:
+    executable: /bin/bash
+  tags:
+    - install
+    - node

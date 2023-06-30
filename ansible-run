@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+## Install Homebrew (if not already installed)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+## Install Ansible
+brew install ansible
+
+## Install Git (if not already installed)
+brew install git
+
+## Uncomment the next line if you want to run ansible-pull
+# ansible-pull -U https://github.com/leonmiltiadou/ansible.git

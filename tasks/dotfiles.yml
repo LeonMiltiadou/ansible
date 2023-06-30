@@ -1,0 +1,27 @@
+- name: Installing stow
+  homebrew:
+    name: stow
+  tags:
+    - install
+    - dotfiles
+    - stow
+
+- name: Cloning .dotfiles
+  ansible.builtin.git:
+    repo: "https://github.com/ThePrimeagen/.dotfiles.git"
+    dest: "{{ lookup('env', 'HOME') }}/.dotfiles"
+    recursive: yes
+    update: yes
+    version: master
+  tags:
+    - install
+    - dotfiles
+    - stow
+
+- name: Stow dotfiles
+  ansible.builtin.command:
+    cmd: cd $HOME/.dotfiles && ./macos
+  tags:
+    - install
+    - dotfiles
+    - stow
