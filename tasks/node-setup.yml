@@ -30,8 +30,10 @@
     - npm-path
 
 - name: Source bash profile
-  ansible.builtin.command:
-    cmd: source ~/.bash_profile
+  shell: . ~/.bash_profile && echo $PATH
+  args:
+    executable: /bin/bash
+  register: result
   tags:
     - install
     - node
@@ -44,11 +46,12 @@
   tags:
     - install
     - node
-
 - name: Install correct version of Node
   shell: n 14
   args:
     executable: /bin/bash
+  environment:
+    N_PREFIX: "{{ ansible_env.HOME }}/.n"
   tags:
     - install
     - node
