@@ -11,3 +11,4 @@
     - include: tasks/node-setup.yml
     - include: tasks/dotfiles.yml
     - include: tasks/npm-packages.yml
+    - include: tasks/productivity-tools.yml
