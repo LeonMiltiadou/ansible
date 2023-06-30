@@ -1,27 +1,38 @@
-- name: kdenlive ppa (ppa:kdenlive/kdenlive-stable)
-  become: true
-  apt_repository:
-   repo: ppa:kdenlive/kdenlive-stable
-   state: present
-   update_cache: True
-  tags:
-    - install
-    - productivity
+- name: Check if Homebrew is installed
+  stat: path=/usr/local/bin/brew
+  register: homebrew_installed
 
-- name: shutter ppa (ppa:linuxuprising/shutter)
-  become: true
-  apt_repository:
-   repo: ppa:linuxuprising/shutter
-   state: present
-   update_cache: True
-  tags:
-    - install
-    - productivity
+- name: Install Homebrew
+  shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  when: not homebrew_installed.stat.exists
+
+- name: Tap Homebrew/cask if not tapped
+  homebrew_tap:
+    name: homebrew/cask
+    state: present
 
 - name: Install packages
-  become: true
-  apt:
-    name: [ "tmux", "wireshark", "fzf", "kdenlive", "gimp", "xclip", "screenkey", "tldr", "ripgrep", "shutter" ]
+  homebrew:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - tmux
+    - wireshark
+    - fzf
+    - tldr
+    - ripgrep
+    - yabai
+  tags:
+    - install
+    - productivity
+
+- name: Install GUI applications
+  homebrew_cask:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - gimp
+    - kdenlive
   tags:
     - install
     - productivity
